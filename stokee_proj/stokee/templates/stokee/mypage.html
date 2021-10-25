@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}マイページ{% endblock title %}
+
+{% block content %}
+
+ 
+
+<style>
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #007A5A;
+}
+.nav-link:hover, .nav-link:focus {
+  color: #5A2F63;
+}
+a {
+  color: #000000;
+  text-decoration: none;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #000000;
+}
+
+h5{
+  font-weight: bold;
+}
+
+.edit-prof {
+
+  color: #fff;
+  
+
+}
+
+.container {
+background-color: #fff;
+
+}
+
+.edit-prof:hover {
+  color: #fff;
+}
+
+.btn-primary, .btn-primary:hover, .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary:disabled, .btn-primary.disabled {
+  background-color:#007A5A;
+  
+}
+</style>
+
+
+  <div style="margin-top: 120px;"></div>
+
+  <div class="container mx-auto my-56 w-56 px-4">
+  
+    <div class="flex justify-center">
+ 
+      <p>👍{{ user.profile.full_name }}さんは現在、<span id="result" >オンライン</span>です。</p>
+ 
+    </div>
+ 
+  </div>
+  <script>
+      window.addEventListener('online', event => {
+result.innerHTML = 'オンライン';
+})
+
+window.addEventListener('offline', event => {
+result.innerHTML = 'オフライン';
+})
+
+  </script>
+
+  <p>
+  {% if user.profile.image %}
+  <img src="{{ MEDIA_URL }}{{ user.profile.image }}" class="user-icon mr-4 border rounded-circle" width="80px" height="80px">
+  {% else %}
+  <img src="{% static 'stokee/media/images/user_image/profile.png' %}" class="user-icon mr-4 border rounded-circle" width="80px" height="80px">
+  {% endif %}
+  <button type = "button" class = "btn-primary rounded-pill border border-0 px-3 py-1 align-text-top"><a href="{% url 'stokee:mypage_update' %}" class="edit-prof">プロフィールを編集</a></button>
+  
+  </p>    
+  <h4>{{ user.profile.full_name }}</h4>
+  <p><small>{{ user.profile.company }} / {{ user.profile.position }}</small></p>
+  <p>{{ user.profile.introduce }}</p>
+  <p><a href="{{ user.profile.URL }}">{{ user.profile.URL }}</a></p>
+  <b>{{ user.profile.following_num }}</b><small>フォロー</small> <b>{{ user.profile.follower_num }}</b><small>フォロワー</small>
+  <div style="margin-top: 30px;"></div>
+
+
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    各種設定
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+    <a class="dropdown-item" href="{% url 'stokee:email_change' %}">メールアドレスの変更</a>
+    <a class="dropdown-item" href="{% url 'stokee:password_change' %}">パスワードの変更</a>
+    <a class="dropdown-item" href="/accounts/logout">ログアウト</a>
+  </div>
+
+<div style="margin-top: 60px;"></div>
+  
+
+
+<ul class="nav nav-pills nav nav-tabs nav-fill" role="tablist">
+<li class="nav-item">
+  <a class="nav-link active" id="item1-tab" data-toggle="tab" href="#item1" role="tab" aria-controls="item1" aria-selected="true">投稿アイデア</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" id="item2-tab" data-toggle="tab" href="#item2" role="tab" aria-controls="item2" aria-selected="false">いいね</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" id="item3-tab" data-toggle="tab" href="#item3" role="tab" aria-controls="item3" aria-selected="false">購入したアイデア</a>
+</li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane fade show active" id="item1" role="tabpanel" aria-labelledby="item1-tab">
+  
+{% for post in post_list %}
+  <div style="margin-top: 20px;"></div>
+<div class="card mb-3" style="width: 100%;">
+  <div class="card-body">
+     
+      <p class="card-text">
+        {% if post.user.profile.image %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{{ MEDIA_URL }}{{ post.user.profile.image }}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% else %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{% static 'stokee/media/images/user_image/profile.png' %}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% endif %}
+         {{ post.user.profile.full_name }} <small>{{ post.user.profile.company }}／{{ post.user.profile.position }}</small>
+        <a href="{% url 'stokee:post_detail' post_id=post.id %}">
+      <h5 class="card-title" style="text-align: center;">{{ post.title }}</h5></a>
+  </a>
+    <p class="card-text" style="text-align: right;">
+      <small class="text-muted">いいね数（{{ post.like_num }}）　{{ post.created_at }}
+          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </small></p>
+  </div>
+  
+</div>
+{% endfor %}
+
+</div>
+
+
+
+<div class="tab-pane fade" id="item2" role="tabpanel" aria-labelledby="item2-tab">
+
+  {% for post in post_like_list %}
+  <div style="margin-top: 20px;"></div>
+<div class="card mb-3" style="width: 100%;">
+  <div class="card-body">
+     
+      <p class="card-text">
+              {% if post.user.profile.image %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{{ MEDIA_URL }}{{ post.user.profile.image }}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% else %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{% static 'stokee/media/images/user_image/profile.png' %}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% endif %}
+              
+              {{ post.user.profile.full_name }} <small>{{ post.user.profile.company }}／{{ post.user.profile.position }}</small></p>
+        <a href="{% url 'stokee:post_detail' post_id=post.id %}">
+      <h5 class="card-title" style="text-align: center;">{{ post.title }}</h5></a>
+  </a>
+    <p class="card-text" style="text-align: right;">
+      <small class="text-muted">いいね数（{{ post.like_num }}）　{{ post.created_at }}
+          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </small></p>
+  </div>
+  
+</div>
+{% endfor %}
+
+</div>
+
+
+
+<div class="tab-pane fade" id="item3" role="tabpanel" aria-labelledby="item3-tab">
+
+
+
+{% for post in post_purchase_list %}
+<div style="margin-top: 20px;"></div>
+<div class="card mb-3" style="width: 100%;">
+  <div class="card-body">
+     
+      <p class="card-text">
+              {% if post.user.profile.image %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{{ MEDIA_URL }}{{ post.user.profile.image }}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% else %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{% static 'stokee/media/images/user_image/normaljpg' %}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% endif %}
+              
+              {{ post.user.profile.full_name }} <small>{{ post.user.profile.company }}／{{ post.user.profile.position }}</small></p>
+        <a href="{% url 'stokee:buy_post_detail' post_id=post.id %}">
+      <h5 class="card-title" style="text-align: center;">{{ post.title }}</h5></a>
+  </a>
+    <p class="card-text" style="text-align: right;">
+      <small class="text-muted">いいね数（{{ post.like_num }}）　{{ post.created_at }}
+          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </small></p>
+  </div>
+  
+</div>
+{% endfor %}
+  
+
+
+</div>
+</div>
+
+
+
+
+  
+
+<div style="margin-top: 120px;"></div>
+
+
+
+{% endblock %}

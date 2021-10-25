@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% block title %}StoKee ワクワク、ドキドキするようなアイデアを{% endblock title %}
+{% block content %}
+
+<style>
+
+  .btn-primary, .btn-primary:hover, .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary:disabled, .btn-primary.disabled {
+      background-color:#007A5A;
+      border-color:#007A5A;
+    }
+      
+  a {
+      color: #4A4D50;
+      text-decoration: none;
+      background-color: transparent;
+      font-weight: bold;
+    }
+
+  a:hover {
+      color: #000000; 
+    }
+
+/*--------------------------------------------------------------
+# タイトル
+--------------------------------------------------------------*/
+  .top_title{
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding: 10px 25px 30px;
+      border-style: solid;
+      /* border-color: #dfdfdf; */      
+      border-style: none;          
+    }
+    
+  .cover-heading{
+      font-size: 4.5rem;
+      margin-bottom:60px;
+    }
+
+  .pre_title1{
+      margin-top:30px;
+      font-size: 14px;
+      font-weight: 200;
+      line-height: 1.2;  
+    }
+
+  .sub_title{     
+      font-size: 1.09rem;
+      margin-bottom: .5rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom:10px;
+    }
+ 
+  hr{     
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+    }
+
+  .contents{
+      text-align: center;
+      line-height: 2.0;
+    }
+  
+
+@media screen and (max-width: 479px){
+  .top_title{
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding: 10px 25px 30px;
+      border-style: solid;
+      /* border-color: #dfdfdf; */      
+      border-style: none;    
+    }
+
+  .cover-heading{
+      font-size: 3.5rem;
+      margin-bottom:30px;
+    }
+
+  .pre_title1{
+      margin-top:20px;
+      font-size: 14px;
+      margin-bottom: .5rem;
+      font-weight: 200;
+      line-height: 1.2;
+      margin-bottom:-10px;
+    }
+
+  .sub_title{
+      margin-top:30px;
+      font-size: 1.09rem;
+      margin-bottom: .5rem;
+      font-weight: 500;
+      line-height: 1.2;     
+    }
+
+  .contents{
+      text-align: left;
+      line-height: 2.0;
+      font-size: small;
+      margin-left: -20px;
+    }
+  }
+</style>
+  
+
+<!-- login Page Content start -->
+
+{% if user.is_authenticated %}
+
+<div style = "margin-top: 120px;"></div>
+ 
+{% for post in posts|slice:"5" %}
+<div class="card mb-3" style="width: 100%;">
+  <div class="card-body">
+     
+      <p class="card-text">
+        {% if post.user.profile.image %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{{ MEDIA_URL }}{{ post.user.profile.image }}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% else %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{% static 'stokee/media/images/user_image/profile.png' %}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% endif %}
+         {{ post.user.profile.full_name }} <small>{{ post.user.profile.company }}／{{ post.user.profile.position }}</small>
+        <a href="{% url 'stokee:post_detail' post_id=post.id %}">
+      <h5 class="card-title" style="text-align: center;">{{ post.title }}</h5></a>
+        </p>
+        <p class="card-text" style="text-align: right;">
+      <small class="text-muted">いいね({{ post.like_num }})　コメント({{ post.comment_num }})　{{ post.created_at }}
+          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </small></p>
+  </div>
+  
+</div>
+
+{% endfor %}
+<div style = "margin-top: 60px;"></div>
+<div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="{% url 'stokee:post_list' %}">アイデアをもっと見る →</a></div>
+
+<!-- login Page Content end -->
+
+{% else %}
+
+<!-- logout Page Content -->
+
+<div style = "margin-top: 120px;"></div> 
+
+<main role="main" class="inner cover">
+    <div class="top_title">    
+        <div class="sub_title" style="text-align: center;">ビジネスアイデア売買サービス</div>
+        <div class="pre_title1" style="text-align: center;">ストーキー</div>
+        <h1 class="cover-heading" style="text-align: center;">StoKee</h1>
+      <hr>
+      <div class="contents">
+        <p>テレビを見ている時や、お風呂に入っている時。<br><br><br>
+
+          何気ない日常の中で、<br>
+         「面白いビジネスアイデアが閃いた！」<br>
+          という瞬間が、あるのではないでしょうか。<br><br><br>
+
+          しかし、どれだけ面白いアイデアを思いついても<br>
+          いろんな感情が頭の中を駆け巡ります。<br><br><br>
+
+
+          <b>自分の事業で手一杯だから、やる時間がない…</b><br>
+          <b>面白いアイデアだけど、私は起業家じゃないし。</b><br>
+          <b>自分がやるよりも、他の人が適任なのでは？</b><br><br><br>
+
+          そんな時には、「StoKee」を使ってみませんか？<br><br><br>
+          StoKee（ストーキー）とは、あなたが普段の生活でふと思いついた“ビジネスアイデア”を気軽に投稿して売買できるサービスです。<br><br><br>
+          構想中のアイデアを投稿してみんなの意見をもらうもよし。<br><br>
+          自分の代わりにアイデアを実現してくれる人を探すもよし。<br><br>
+          たくさんのアイデアを投稿して、みんなとワイワイ交流するもよし。<br><br><br><br>
+
+          StoKeeの使い方は千差万別！<br><br>
+          さあ、あなたの中で眠っているアイデアを、新しいビジネスの芽にしてみませんか？
+        </p>
+      </div>
+          <div style="margin-top: 60px;"></div>
+              <div class="text-center">
+                   <a href="/accounts/register" class="btn btn-primary text-uppercase">新規会員登録はこちら</a>
+              </div>
+    </div>
+    <div style="margin-top: 120px;"></div>
+<!-- logout Page Content end--> 
+</main>
+
+{% endif %}
+{% endblock content %}
+
+ 

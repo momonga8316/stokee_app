@@ -1,0 +1,12 @@
+{% for following in followings %}
+            <div class="post-preview">
+                
+            
+            
+                <p class="post-meta text-muted font-weight-lighter mt-3" style="text-align: right;">
+                    {{ following.user.profile.usename }}
+                </p>
+            </div>
+            <!-- Divider-->
+            <hr class="my-4" />
+{% endfor %}

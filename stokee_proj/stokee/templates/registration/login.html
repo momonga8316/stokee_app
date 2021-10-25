@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load staticfiles %}
+
+
+
+{% block content %}
+<style>
+    .btn-primary, .btn-primary:hover, .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary:disabled, .btn-primary.disabled {
+      background-color:#007A5A;
+      border-color:#007A5A;
+    }
+
+    a {
+  color: #5A2F63;
+  text-decoration: none;
+  background-color: transparent;
+  font-weight: bold;
+    }
+
+    a:hover {
+  color: #5A2F63;
+    }
+
+
+</style>
+
+
+<div style="margin-top: 200px;"></div>
+
+    {% if user.is_authenticated %}
+        <script type="text/javascript">
+            window.location.href = '/stokee/post';
+        </script>
+    {% else %}
+            <h2 class="text-center">Come Home!</h2>
+            <div style="margin-top: 60px;"></div>
+            <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <p class="text-center">{% bootstrap_form form layout='horizontal' %}</p>
+            <p class="text-center">You agree to the <strong>Terms & Conditions</strong>.</p>
+            <input type="hidden" name="next" value="{{ next }}"/>
+            
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button type="submit" class="btn-block btn btn-lg btn-primary">Login</button></div>
+                <div style="margin-top: 60px;"></div>
+                <p class="text-center">Already have an account? <a href="/accounts/register">Sign in here</a></p>
+                <p class="text-center">Forget your Password? <a href="{% url 'stokee:password_reset' %}">Password Reset</a></p>
+                </div>
+            
+
+        </form>
+
+        <!-- このボタンがtwitterのログインボタンだが・・・-->
+        <!-- <button type="button" onclick="location.href='{% url 'social:begin' 'twitter' %}'">Twitterログイン</button> -->
+        <div style="margin-top: 60px;"></div>
+    {% endif %}
+
+
+
+{% endblock content %}

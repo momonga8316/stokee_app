@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load mathfilters %}
+{% load static %}
+{% block title %}アイデア詳細{% endblock title %}
+
+{% block content %}
+<style>
+  
+a {
+    color: #5A2F63;
+    text-decoration: none;
+    background-color: transparent;
+    font-weight: bold;
+  }
+    
+a:hover {
+    color: #5A2F63;
+  }
+    
+    
+.btn-primary, .btn-primary:hover, .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary:disabled, .btn-primary.disabled {
+    background-color:#007A5A;
+    border-color:#007A5A;
+}
+
+h4 {
+    color: #0a0a0a;
+    text-decoration: none;
+    background-color: transparent;
+    font-weight: bold;
+  }
+
+img.content1{
+    position: relative;
+    max-width: 100%;
+  
+  }
+
+
+h2 {
+ border-bottom: solid 2px #5A2F63;  /*線の種類（実線） 太さ 色*/
+ color: #5A2F63;  /*文字色*/
+ font-size: 20px;  /*文字の大きさ*/
+ font-weight: bold;
+}
+
+.top-line{
+    color: #fff!important;
+    padding: .25rem!important;
+    margin-bottom: .25rem!important;
+    background-color:#5A2F63;
+
+}
+
+    </style>
+
+
+    <div style="margin-top: 120px;"></div>
+    <div class="top-line">　{{ post.user.profile.full_name }}さんのアイデア</div>
+    <div style="margin-top: 30px;"></div>
+
+    <script>
+        window.addEventListener('online', event => {
+  result.innerHTML = 'オンライン';
+})
+
+window.addEventListener('offline', event => {
+  result.innerHTML = 'オフライン';
+})
+
+    </script>
+
+    <p>
+    {% if post.user.profile.image %}
+    <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{{ MEDIA_URL }}{{ post.user.profile.image }}" class="user-icon mr-4 border rounded-circle content1" width="60px" height="60px"></a>
+    {% else %}
+    <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{% static 'stokee/media/images/user_image/profile.png' %}" class="user-icon mr-4 border rounded-circle content1" width="60px" height="60px"></a>
+    {% endif %}
+    
+    </p>    
+    <h5>{{ post.user.profile.full_name }}</h5>
+    <p><small>{{ post.user.profile.company }} / {{ post.user.profile.position }}</small></p>
+
+<hr>
+
+
+
+<div style = "margin-top:60px ;"></div>
+
+
+<h4 class="text-center">{{ post.title }}</h4>
+
+
+<div style = "margin-top:60px ;"></div>
+
+
+<hr>
+
+<div style = "margin-top:70px ;"></div>
+<h2>事業アイデアを思いついたきっかけ</h2>
+<div style = "margin-top:30px ;"></div>
+
+<p>{{ post.content }}</p>   
+
+<div style = "margin-top:70px ;"></div>
+
+<h2>事業アイデアの成功ポイント</h2>
+<div style = "margin-top:30px ;"></div>
+<p>{{ post.description }}</p>        
+        
+
+
+<div style = "margin-top:70px ;"></div>
+<p>いいね！（{{ post.like_num }}）　コメント({{ post.comment_num }})</p>
+<!-- <a href="{% url 'stokee:like' post.id %}">いいね！</a>（{{ post.like_num }}） -->
+
+<div style = "margin-top:60px ;"></div>
+<div class="p-1 mb-1 bg-dark text-white">　コメント</div>
+
+{% for comment in comments %}<br>
+  {% if comment.user.profile.image %}
+    <a href="{% url 'stokee:profile_detail' user_id=comment.user.username %}"><img src="{{ MEDIA_URL }}{{ comment.user.profile.image }}" class="user-icon mr-4 border rounded-circle content1" width="45px" height="45px"></a>
+    {% else %}
+    <a href="{% url 'stokee:profile_detail' user_id=comment.user.username %}"><img src="{% static 'stokee/media/images/user_image/profile.png' %}" class="user-icon mr-4 border rounded-circle content1" width="45px" height="45px"></a>
+    {% endif %}
+  {{ comment.user.profile.full_name }}
+  <div style="margin-top: 10px;"></div>
+  <p>{{ comment.text }}</p>
+  <hr>
+{% endfor %}
+
+<div style = "margin-bottom:60px ;"></div>
+
+<form method="post" action="">
+  {% csrf_token %}
+  <p><textarea name="text" cols="40" rows="3" required="" id="id_text"></textarea></p>
+  <input type="submit" class="btn-primary">
+  
+</form>
+
+
+<div style = "margin-bottom:120px ;"></div>
+<a href="{% url 'stokee:post_list' %}?page={{ page }}">← 一覧ページに戻る</a>　
+
+
+<div style = "margin-bottom:120px ;"></div>
+
+
+
+{% endblock %}
+
+
+
+
+
+<!-- 
+いいねボタン
+ <a href="javascript:void(0)" id="{{ post.id }}" class="like"
+ name="{{ post.id }}" type="button">いいね ({{ post.like_num }})</a>
+
+JQuery
+<script src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+//Ajaxによる処理を記入する前に、以下のおまじない
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    
+    //いいねボタンが押されたら非同期通信を行う
+    $('like').on('click', function () {
+        var post_id = $(this).attr('name')
+        $.ajax({
+            type: 'POST',
+            url:  post_id + '/like/',
+            data: {
+                'id': post_id
+            },
+            dataType: 'json'
+        })
+        .done(function (data) {
+    //post.pyからpost_id, is_likeをjson型のデータで受け取る
+    //'#post_' + String(data['post_id'])で記事それぞれのidを指定する
+            $('#post_' + String(data['post_id'])).text('いいね' + '(' + String(data['is_like']) + ')');
+        })
+        .fail(function(){
+
+        })
+    });
+
+</script>
+
+-->
+
+

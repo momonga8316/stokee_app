@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load mathfilters %}
+{% load staticfiles %}
+{% block title %}アイデア一覧{% endblock title %}
+
+{% block content %}
+
+<style>
+  .btn-primary, .btn-primary:hover, .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary:disabled, .btn-primary.disabled {
+    background-color:#007A5A;
+    border-color:#007A5A;
+  }
+  
+  
+
+    .nav-pills .nav-link.active,
+    .nav-pills .show > .nav-link {
+      color: #fff;
+      background-color: #007A5A;
+    }
+    .nav-link:hover, .nav-link:focus {
+      color: #007A5A;
+    }
+    a {
+      color: #000000;
+      text-decoration: none;
+      background-color: transparent;
+      font-weight: bold;
+    }
+
+    a:hover {
+      color: #000000; 
+    }
+  
+  </style>
+
+
+
+<div style="margin-top:120px;"></div>
+
+
+<form method="GET" action="{% url 'stokee:post_list' %}">
+    <input type="text" name="keyword" placeholder="キーワード検索">
+    <button type="submit" class="btn-primary">検索</button>
+</form>
+
+
+<!-- Post list Content -->
+<div style = "margin-top: 60px;"></div>
+
+{% for post in posts|slice:"5" %}
+<div class="card mb-3" style="width: 100%;">
+  <div class="card-body">
+     
+      <p class="card-text">
+        {% if post.user.profile.image %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{{ MEDIA_URL }}{{ post.user.profile.image }}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% else %}
+              <a href="{% url 'stokee:profile_detail' user_id=post.user.username %}"><img src="{% static 'stokee/media/images/user_image/profile.png' %}" class="user-icon rounded-circle" width="40px" height="40px"></a>
+              {% endif %}
+         {{ post.user.profile.full_name }} <small>{{ post.user.profile.company }}／{{ post.user.profile.position }}</small>
+        <a href="{% url 'stokee:post_detail' post_id=post.id %}">
+      <h5 class="card-title" style="text-align: center;">{{ post.title }}</h5></a>
+  </a>
+    <p class="card-text" style="text-align: right;">
+      <small class="text-muted">いいね({{ post.like_num }})　コメント({{ post.comment_num }})　{{ post.created_at }}
+          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </small></p>
+  </div>
+  
+</div>
+
+{% endfor %}
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+{% if page > 1 %}
+<li><a href="{% url 'stokee:post_list' %}?page={{ page|sub:1 }}">前のページ</a></li>
+{% endif %}
+{% if page < last_page %}
+<li><a href="{% url 'stokee:post_list' %}?page={{ page|add:1 }}">次のページ</a></li>
+{% endif %}
+</ul>
+</nav>
+
+
+
+
+
+  {% endblock %}

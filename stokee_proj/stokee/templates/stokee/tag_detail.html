@@ -1,0 +1,10 @@
+<h1>「#{{ tag.name }}」の投稿一覧</h1>
+<ul>
+  {% for post in object_list %}
+  
+  <li><a href="{% url 'stokee:post_detail' post.id %}">{{ post.title }}</a></li>
+  
+  {% endfor %}
+</ul>
+
+
