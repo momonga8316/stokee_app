@@ -19,14 +19,14 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='media/images/user_image',null=True, blank=True,) # 'プロフィール画像'
     introduce = models.TextField('自己紹介',blank=True,null=True,max_length=1000) # '自己紹介文'
     URL = models.URLField() # 'TwitterURL'
-    #followees = models.ManyToManyField(
-        #'User', verbose_name='フォロー中のユーザー', through='Relationship',
-        #related_name='followees', through_fields=('follower', 'following'))
-    #followers = models.ManyToManyField(
-        #'User', verbose_name='フォローされているユーザー', through='Relationship', 
-        #related_name='followers', through_fields=('following', 'follower'))
-    following_num = models.IntegerField('フォロー', default=0)
-    follower_num = models.IntegerField('フォロワー', default=0)
+    followees = models.ManyToManyField(
+        'Profile', verbose_name='フォロー中のユーザー', through='Relationship',
+        related_name='+', through_fields=('follower', 'following'))
+    followers = models.ManyToManyField(
+        'Profile', verbose_name='フォローされているユーザー', through='Relationship', 
+        related_name='+', through_fields=('following', 'follower'))
+    # following_num = models.IntegerField('フォロー', default=0)
+    # follower_num = models.IntegerField('フォロワー', default=0)
    
     #管理画面で表示される文字列を定義する
     def __str__(self):
@@ -45,8 +45,8 @@ class Relationship(models.Model):
         verbose_name_plural = 'フォロー情報データ'
         #unique_together = ('follower', 'following')
 
-    follower = models.ForeignKey(User, related_name='follower', on_delete=models.CASCADE)
-    following = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    follower = models.ForeignKey(Profile, related_name='follower', on_delete=models.CASCADE)
+    following = models.ForeignKey(Profile, related_name='following', on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
