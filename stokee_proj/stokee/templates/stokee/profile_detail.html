@@ -104,7 +104,7 @@
     <p><small>{{ user.profile.company }} / {{ user.profile.position }}</small></p>
     <p>{{ user.profile.introduce }}</p>
     <p><a href="{{ user.profile.URL }}">{{ user.profile.URL }}</a></p>
-    <b>{{ user.profile.following_num }}</b><small>フォロー</small> <b>{{ user.profile.follower_num }}</b><small>フォロワー</small>
+    <b>{{ user.profile.followees.count }}</b><small>フォロー</small> <b>{{ user.profile.followers.count }}</b><small>フォロワー</small>
  
     
     <div style="margin-top: 30px;"></div>
