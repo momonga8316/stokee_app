@@ -27,7 +27,9 @@ def detail_view(request, user_id, **kwargs): #uls.pyの「path('mypage/<slug:use
     purchase_id = Purchase.objects.all().filter(purchased_user_id=user.id).values_list('purchased_post_id', flat=True)
     post_purchase_list = Post.objects.filter(id__in=purchase_id)
 
-    return render(request, 'stokee/profile_detail.html', {'user':user,'post_list': post_list,'post_like_list': post_like_list, 'post_purchase_list': post_purchase_list }) 
+    is_follow = user.username in request.user.profile.followees.values_list('id', flat=True)
+
+    return render(request, 'stokee/profile_detail.html', {'user':user,'post_list': post_list,'post_like_list': post_like_list, 'post_purchase_list': post_purchase_list, 'is_follow': is_follow }) 
 
 
 

@@ -108,9 +108,11 @@
  
     
     <div style="margin-top: 30px;"></div>
-    
-    <button type = "button" class = "btn-primary rounded-pill border border-0 px-3 py-1 align-text-top"><a href="{% url 'stokee:follow' user_id=user.username %}" class="follow_botton">フォローする</a></button>    
-    <p><a href="{% url 'stokee:unfollow' user_id=user.username %}">フォローを解除する</a></p>
+    {% if is_follow %}
+      <p><a href="{% url 'stokee:unfollow' user_id=user.username %}">フォローを解除する</a></p>
+    {% else %}
+      <button type = "button" class = "btn-primary rounded-pill border border-0 px-3 py-1 align-text-top"><a href="{% url 'stokee:follow' user_id=user.username %}" class="follow_botton">フォローする</a></button>    
+    {% endif %}
 
 
     
